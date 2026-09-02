@@ -17,7 +17,12 @@ cp "$DIR/src/ubuntu_system_theme.py" ~/.local/bin/ubuntu-system-theme
 chmod +x ~/.local/bin/ubuntu-system-theme
 
 echo "🔤 Installing typography (Bebas Neue & Dosis)..."
-cp "$DIR/assets/fonts/"* ~/.local/share/fonts/ 2>/dev/null || true
+if [ -d "$DIR/assets/fonts" ] && [ -f "$DIR/assets/fonts/BebasNeue-Regular.ttf" ]; then
+    cp "$DIR/assets/fonts/"* ~/.local/share/fonts/ 2>/dev/null || true
+else
+    curl -sL "https://raw.githubusercontent.com/google/fonts/main/ofl/bebasneue/BebasNeue-Regular.ttf" -o ~/.local/share/fonts/BebasNeue-Regular.ttf
+    curl -sL "https://raw.githubusercontent.com/google/fonts/main/ofl/dosis/Dosis%5Bwght%5D.ttf" -o ~/.local/share/fonts/Dosis-VariableFont_wght.ttf
+fi
 fc-cache -fv ~/.local/share/fonts >/dev/null 2>&1 || true
 
 echo "🎨 Installing application icons..."
