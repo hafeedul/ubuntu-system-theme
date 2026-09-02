@@ -43,22 +43,22 @@ Copy and paste the single command corresponding to your Linux distribution into 
 
 ### 🟠 Ubuntu / Linux Mint / Debian / Pop!_OS / Zorin OS
 ```bash
-sudo apt update && sudo apt install -y git python3-gi python3-psutil gir1.2-gtk-3.0 gir1.2-pango-1.0 playerctl curl && git clone https://github.com/hafeedul/ubuntu-system-theme.git && cd ubuntu-system-theme && ./install.sh
+sudo apt update && sudo apt install -y git python3-gi python3-psutil gir1.2-gtk-3.0 gir1.2-pango-1.0 playerctl curl && git clone https://github.com/hafeedul/ubuntu-system-theme.git && cd ubuntu-system-theme && bash install.sh
 ```
 
 ### 🔵 Fedora / RHEL / AlmaLinux / Rocky Linux
 ```bash
-sudo dnf install -y git python3-gobject python3-psutil gtk3 playerctl curl && git clone https://github.com/hafeedul/ubuntu-system-theme.git && cd ubuntu-system-theme && ./install.sh
+sudo dnf install -y git python3-gobject python3-psutil gtk3 playerctl curl && git clone https://github.com/hafeedul/ubuntu-system-theme.git && cd ubuntu-system-theme && bash install.sh
 ```
 
 ### 🏹 Arch Linux / Manjaro / EndeavourOS / Garuda
 ```bash
-sudo pacman -S --noconfirm git python-gobject python-psutil gtk3 playerctl curl && git clone https://github.com/hafeedul/ubuntu-system-theme.git && cd ubuntu-system-theme && ./install.sh
+sudo pacman -S --noconfirm git python-gobject python-psutil gtk3 playerctl curl && git clone https://github.com/hafeedul/ubuntu-system-theme.git && cd ubuntu-system-theme && bash install.sh
 ```
 
 ### 🦎 openSUSE (Tumbleweed & Leap)
 ```bash
-sudo zypper install -y git python3-gobject python3-psutil typelib-1_0-Gtk-3_0 playerctl curl && git clone https://github.com/hafeedul/ubuntu-system-theme.git && cd ubuntu-system-theme && ./install.sh
+sudo zypper install -y git python3-gobject python3-psutil typelib-1_0-Gtk-3_0 playerctl curl && git clone https://github.com/hafeedul/ubuntu-system-theme.git && cd ubuntu-system-theme && bash install.sh
 ```
 
 ---
@@ -140,7 +140,7 @@ To cleanly remove the widget, fonts, service, and settings from your system:
 
 ```bash
 cd ubuntu-system-theme
-./uninstall.sh
+bash uninstall.sh
 ```
 
 ---
