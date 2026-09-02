@@ -9,6 +9,7 @@ Ubuntu System Theme - Aesthetic Desktop Widget
   * "🔒 Lock Position" (disables dragging so it cannot be moved accidentally)
   * "🔓 Unlock Position" (enables dragging so you can adjust position anytime)
 - Remembers saved position and lock state across reboots
+- Single-instance guaranteed via kernel file lock (never duplicates on reboot)
 - Circular dial with live progress
 - Bebas Neue typography and Dosis system stats
 - 0% CPU overhead, zero kernel / DRM hacks
@@ -16,6 +17,7 @@ Ubuntu System Theme - Aesthetic Desktop Widget
 
 import sys
 import os
+import fcntl
 
 os.environ['GDK_BACKEND'] = 'x11'
 
@@ -42,6 +44,16 @@ HEIGHT = 560
 CONFIG_DIR = os.path.expanduser("~/.config/aesthetic-widget")
 CONFIG_FILE = os.path.join(CONFIG_DIR, "config.json")
 AUTOSTART_FILE = os.path.expanduser("~/.config/autostart/ubuntu-system-theme.desktop")
+
+# Enforce single instance - prevent duplicate widgets on reboot or login
+LOCK_FILE = os.path.join(CONFIG_DIR, "app.lock")
+os.makedirs(CONFIG_DIR, exist_ok=True)
+try:
+    _lock_fd = open(LOCK_FILE, "w")
+    fcntl.flock(_lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+except (IOError, BlockingIOError):
+    # Another instance is already running; exit silently
+    sys.exit(0)
 
 class AestheticWidget(Gtk.Window):
     def __init__(self):
@@ -180,7 +192,7 @@ class AestheticWidget(Gtk.Window):
 Type=Application
 Name=Ubuntu System Theme
 Comment=Autostart aesthetic desktop widget on login
-Exec={os.path.expanduser('~/.local/bin/conky-desktop')}
+Exec={os.path.expanduser('~/.local/bin/ubuntu-system-theme')}
 Icon=ubuntu-system-theme
 Terminal=false
 Hidden=false
