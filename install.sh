@@ -10,7 +10,6 @@ mkdir -p ~/.local/share/icons/hicolor/scalable/apps
 mkdir -p ~/.local/share/icons/hicolor/128x128/apps
 mkdir -p ~/.local/share/applications
 mkdir -p ~/.config/autostart
-mkdir -p ~/.config/systemd/user
 
 echo "📦 Installing executable to ~/.local/bin/ubuntu-system-theme..."
 cp "$DIR/src/ubuntu_system_theme.py" ~/.local/bin/ubuntu-system-theme
@@ -48,6 +47,7 @@ DESK
 chmod +x ~/.local/share/applications/ubuntu-system-theme.desktop
 update-desktop-database ~/.local/share/applications/ 2>/dev/null || true
 
+echo "⚡ Configuring single-instance autostart on login..."
 cat << 'AUTO' > ~/.config/autostart/ubuntu-system-theme.desktop
 [Desktop Entry]
 Type=Application
@@ -61,25 +61,15 @@ X-GNOME-Autostart-enabled=true
 AUTO
 chmod +x ~/.config/autostart/ubuntu-system-theme.desktop
 
-cat << 'SERV' > ~/.config/systemd/user/ubuntu-system-theme.service
-[Unit]
-Description=Ubuntu System Theme Desktop Widget
-After=graphical-session.target
-
-[Service]
-Type=simple
-Environment=DISPLAY=:0
-ExecStart=/home/hafeed/.local/bin/ubuntu-system-theme
-Restart=on-failure
-RestartSec=3
-
-[Install]
-WantedBy=default.target
-SERV
-
+# Clean up legacy systemd service to prevent duplicate startup
+systemctl --user disable ubuntu-system-theme 2>/dev/null || true
+rm -f ~/.config/systemd/user/ubuntu-system-theme.service 2>/dev/null || true
 systemctl --user daemon-reload 2>/dev/null || true
-systemctl --user enable ubuntu-system-theme 2>/dev/null || true
-systemctl --user restart ubuntu-system-theme 2>/dev/null || nohup ~/.local/bin/ubuntu-system-theme >/dev/null 2>&1 &
+
+# Start widget if not already running
+pkill -f "ubuntu-system-theme" 2>/dev/null || true
+sleep 0.5
+nohup ~/.local/bin/ubuntu-system-theme >/dev/null 2>&1 &
 
 echo "========================================================"
 echo "🎉 Ubuntu System Theme installed and running successfully!"
